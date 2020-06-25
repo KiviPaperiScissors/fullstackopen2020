@@ -10,6 +10,10 @@ const App = () => {
 
   const [ countries, setCountries ] = useState([])
   const [ countryFilterString, setCountryFilterString ] = useState('')
+  const [ weather, setWeather ] = useState([])
+
+
+  const api_key = process.env.REACT_APP_API_KEY
 
   const handleFilterChange = (event) => {
     console.log(event.target.value)
@@ -44,6 +48,24 @@ const App = () => {
 
   }
 
+  function useFetchWeather(capital) {
+
+    let params = {
+      access_key: api_key,
+      query: capital
+    }
+    console.log(params)
+    useEffect(() => {
+      axios
+        .get('http://api.weatherstack.com/current', {params})
+        .then(response => {
+          console.log('weather data fetched', response.data)
+          setWeather(response.data)
+        })
+    },[])
+  }
+
+
   return (
     <div>
       <h1>Country query:</h1>
@@ -52,7 +74,8 @@ const App = () => {
       <Results countries={countries.filter(country =>
         country.name.toUpperCase()
         .includes(countryFilterString.toUpperCase()))} countryFilterString={countryFilterString}
-        updateVerbose={updateVerboseAttribute} />
+        updateVerbose={updateVerboseAttribute} weather = {weather}
+        fetchWeather={useFetchWeather}/>
 
     </div>
 

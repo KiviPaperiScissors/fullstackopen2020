@@ -1,4 +1,5 @@
 import React from 'react'
+import WeatherData from './WeatherData'
 
 const Results = (props) => {
 
@@ -22,9 +23,18 @@ const Results = (props) => {
     </div>
   )
 
-  return (
-    <FeaturedCountry country = {props.countries[0]} />
+  if (props.countries.length === 0) return (
+    <div>
+      Sorry, your query does not match any country in the database.
+    </div>
+  )
 
+  return (
+    <>
+    <FeaturedCountry country = {props.countries[0]} />
+    <WeatherData country = {props.countries[0]} weather = {props.weather}
+      fetchWeather={props.fetchWeather} />
+    </>
 
 
   )
