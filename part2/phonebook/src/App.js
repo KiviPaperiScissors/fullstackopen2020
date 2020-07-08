@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './Components/Person'
 import Filter from './Components/Filter'
 import PersonForm from './Components/PersonForm'
 import Notifications from './Components/Notification'
 import personService from './services/persons'
+
 
 
 const App = () => {
@@ -94,9 +94,16 @@ const App = () => {
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
+    })
+      .catch(error => {
+        console.log(error.response.data)
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+    })
+  }
 
-      })
-    }
 
 
   const deletePerson = (event, id) => {
