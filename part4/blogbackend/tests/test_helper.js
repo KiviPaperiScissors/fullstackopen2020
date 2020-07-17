@@ -1,6 +1,19 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
+//testUsers password is test
+
+const testUser = {
+  _id: "5f1166e2d7df1155bc8b90a0",
+  blogs: [],
+  username: "tester",
+  name: "tester",
+  passwordHash: "$2b$10$.uQpNuS6Et0tEtShLlo6L.IcmBsEdl.6tJB1gBqudWnRWZT8LZ0J6",
+  __v: 0
+}
+
+
+
 const initialBlogs = [
   {
     _id: "5a422a851b54a676234d17f7",
@@ -8,6 +21,7 @@ const initialBlogs = [
     author: "Michael Chan",
     url: "https://reactpatterns.com/",
     likes: 7,
+    user: testUser._id,
     __v: 0
   },
   {
@@ -16,6 +30,7 @@ const initialBlogs = [
     author: "Edsger W. Dijkstra",
     url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
     likes: 5,
+    user: testUser._id,
     __v: 0
   },
   {
@@ -24,6 +39,7 @@ const initialBlogs = [
     author: "Edsger W. Dijkstra",
     url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
     likes: 12,
+    user: testUser._id,
     __v: 0
   },
   {
@@ -32,6 +48,7 @@ const initialBlogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
     likes: 10,
+    user: testUser._id,
     __v: 0
   },
   {
@@ -40,6 +57,7 @@ const initialBlogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
     likes: 0,
+    user: testUser._id,
     __v: 0
   },
   {
@@ -48,9 +66,13 @@ const initialBlogs = [
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2,
+    user: testUser._id,
     __v: 0
   }
 ]
+
+testUser.blogs = initialBlogs.map(blog => blog._id)
+// console.log(testUser)
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
@@ -63,6 +85,7 @@ const usersInDb = async () => {
 }
 
 module.exports = {
+  testUser,
   initialBlogs,
   blogsInDb,
   usersInDb

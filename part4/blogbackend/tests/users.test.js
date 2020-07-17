@@ -1,3 +1,7 @@
+
+/*
+ no longer used
+
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 
@@ -110,3 +114,5 @@ describe('when there is initially one user in db', () => {
 afterAll(() => {
   mongoose.connection.close()
 })
+
+*/
