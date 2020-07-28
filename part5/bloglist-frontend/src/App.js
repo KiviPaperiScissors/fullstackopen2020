@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import LogoutForm from './components/LogoutForm'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notifications from './components/Notification'
 
 const App = () => {
+  const [loginVisible, setLoginVisible] = useState(false)
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [ newTitle, setNewTitle ] = useState('')
-  const [ newAuthor, setNewAuthor ] = useState('')
-  const [ newUrl, setNewUrl ] = useState('')
   const [ notificationMessage, setNotificationMessage ] = useState(null)
   const [ errorMessage, setErrorMessage ] = useState(null)
+  const blogFormRef = useRef()
 
 
 
@@ -32,6 +35,29 @@ const App = () => {
 
     }
   }, [])
+
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : ''}
+    const showWhenVisible = { display: loginVisible ? '' : 'none'}
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>Log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}> Cancel</button>
+        </div>
+      </div>
+    )
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -77,83 +103,27 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        Username:
-        <input
-          type = "text"
-          value={username}
-          name="username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        Password:
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">Log in</button>
-    </form>
+  const logoutForm = () => (
+    <LogoutForm
+      user={user}
+      handleLogout={handleLogout}
+    />
   )
 
   const blogForm  = () => (
-    <>
-      <div>
-        {user.name} is logged in.
-        <button onClick={handleLogout}>
-          Log out
-          </button>
-        </div>
-        <h2> Create new entry: </h2>
-        <form onSubmit={addName}>
-          <div>
-            Title: <input
-              value={newTitle}
-              onChange={({ target }) => setNewTitle(target.value)}
-            />
-          </div>
-          <div>
-            Author: <input
-              value={newAuthor}
-              onChange={({ target }) => setNewAuthor(target.value)}
-            />
-          </div>
-          <div>
-            Url: <input
-              value={newUrl}
-              onChange={({ target }) => setNewUrl(target.value)}
-            />
-          </div>
-          <div>
-            <button type="submit">Add entry</button>
-          </div>
-        </form>
-
-      </>
+    <Togglable buttonLabel="New blog" ref={blogFormRef}>
+      <BlogForm createBlog={addBlog}
+      />
+    </Togglable>
   )
 
-  const addName = (event) => {
-    event.preventDefault()
 
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    }
-
-
+  const addBlog = (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
         setNotificationMessage(`"${returnedBlog.title}" added to collection.`)
         setTimeout(() => {
           setNotificationMessage(null)
@@ -175,7 +145,9 @@ const App = () => {
 
       <Notifications.Notification message={notificationMessage} />
       <Notifications.Error message={errorMessage} />
-
+      {
+        user !== null && logoutForm()
+      }
       {
         user === null ?
           loginForm() :
