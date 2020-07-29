@@ -21,9 +21,10 @@ const App = () => {
 
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort((a, b) => b.likes - a.likes)
       setBlogs( blogs )
-    )
+    })
   }, [])
 
   useEffect(() => {
@@ -112,7 +113,7 @@ const App = () => {
 
   const blogForm  = () => (
     <Togglable buttonLabel="New blog" ref={blogFormRef}>
-      <BlogForm createBlog={addBlog}
+      <BlogForm createBlog={addBlog} user={user}
       />
     </Togglable>
   )
@@ -139,6 +140,43 @@ const App = () => {
 
   }
 
+  const updateBlog = (id, blogObject) => {
+    console.log(blogObject)
+    blogService
+      .update(id, blogObject)
+      .then(updatedBlog => {
+        setBlogs(blogs.map(blog => blog._id !== id
+        ? blog : updatedBlog))
+        setNotificationMessage(
+          `${blogObject.title} liked!`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+      .catch(error => {
+        console.log('error in update', error.response.data)
+        setErrorMessage(error.response.data)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+
+  }
+
+  const removeBlog = (id) => {
+    let delBlogTitle = blogs.find(p => p.id === id).title
+    blogService
+      .remove(id)
+      .then(response => {
+        setBlogs(blogs.filter(p => p.id !== id))
+      })
+      setNotificationMessage(`${delBlogTitle} deleted from the collection.`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+  }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -155,7 +193,13 @@ const App = () => {
       }
 
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateBlog={updateBlog}
+          user={user}
+          removeBlog={removeBlog}
+          />
       )}
     </div>
   )
