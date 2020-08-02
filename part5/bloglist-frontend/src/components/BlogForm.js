@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const BlogForm = ({ createBlog, user }) => {
   const [ newTitle, setNewTitle ] = useState('')
@@ -9,7 +9,7 @@ const BlogForm = ({ createBlog, user }) => {
     setNewTitle(event.target.value)
   }
   const handleAuthorChange = (event) => {
-   setNewAuthor(event.target.value)
+    setNewAuthor(event.target.value)
   }
   const handleUrlChange = (event) => {
     setNewUrl(event.target.value)
@@ -30,35 +30,38 @@ const BlogForm = ({ createBlog, user }) => {
   }
 
   return (
-    <>
+    <div className="formDiv">
 
-         <h2> Create new entry: </h2>
-         <form onSubmit={addBlog}>
-           <div>
-             Title: <input
-               value={newTitle}
-               onChange={handleTitleChange}
-             />
-           </div>
-           <div>
-             Author: <input
-               value={newAuthor}
-               onChange={handleAuthorChange}
-             />
-           </div>
-           <div>
-             Url: <input
-               value={newUrl}
-               onChange={handleUrlChange}
-             />
-           </div>
-           <div>
-             <button type="submit">Add entry</button>
-           </div>
-         </form>
+      <h2> Create new entry: </h2>
+      <form onSubmit={addBlog}>
+        <div>
+          Title: <input
+            id='title'
+            value={newTitle}
+            onChange={handleTitleChange}
+          />
+        </div>
+        <div>
+          Author: <input
+            id='author'
+            value={newAuthor}
+            onChange={handleAuthorChange}
+          />
+        </div>
+        <div>
+          Url: <input
+            id='url'
+            value={newUrl}
+            onChange={handleUrlChange}
+          />
+        </div>
+        <div>
+          <button type="submit">Add entry</button>
+        </div>
+      </form>
 
-       </>
-   )
+    </div>
+  )
 
 }
 

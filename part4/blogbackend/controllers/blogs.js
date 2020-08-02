@@ -103,15 +103,13 @@ blogsRouter.put('/:id', async (request, response, next) => {
       } else {
         const user = await User.findById(decodedToken.id)
         if ( body.user.toString() === user.id.toString()) {
-          // console.log('did we make it into the if clause?')
-          const blog = {
+            const blog = {
             title: body.title,
             author: body.author,
             url: body.url,
             likes: body.likes
           }
           console.log(blog)
-          // we made it this far, and then it dies...
 
           await Blog.findByIdAndUpdate(target, blog, { new: true })
           response.status(200).json(blog)

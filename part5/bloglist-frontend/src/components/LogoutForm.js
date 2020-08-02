@@ -9,8 +9,8 @@ const LogoutForm = ({
       {user.name} is logged in.
       <button onClick={handleLogout}>
         Log out
-        </button>
-      </div>
+      </button>
+    </div>
   )
 }
 

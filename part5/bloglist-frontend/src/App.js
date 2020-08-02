@@ -38,8 +38,8 @@ const App = () => {
   }, [])
 
   const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' : ''}
-    const showWhenVisible = { display: loginVisible ? '' : 'none'}
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
     return (
       <div>
@@ -85,8 +85,8 @@ const App = () => {
       console.log('Wrong credentials')
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        setErrorMessage(null)
+      }, 5000)
 
     }
 
@@ -130,10 +130,10 @@ const App = () => {
           setNotificationMessage(null)
         }, 5000)
       })
-        .catch(error => {
-          console.log('something went wrong with posting', blogObject, error.response.data)
-          setErrorMessage('Something went wrong with posting')
-          setTimeout(() => {
+      .catch(error => {
+        console.log('something went wrong with posting', blogObject, error.response.data)
+        setErrorMessage('Something went wrong with posting')
+        setTimeout(() => {
           setErrorMessage(null)
         }, 5000)
       })
@@ -146,7 +146,7 @@ const App = () => {
       .update(id, blogObject)
       .then(updatedBlog => {
         setBlogs(blogs.map(blog => blog._id !== id
-        ? blog : updatedBlog))
+          ? blog : updatedBlog))
         setNotificationMessage(
           `${blogObject.title} liked!`
         )
@@ -168,13 +168,13 @@ const App = () => {
     let delBlogTitle = blogs.find(p => p.id === id).title
     blogService
       .remove(id)
-      .then(response => {
+      .then(() => {
         setBlogs(blogs.filter(p => p.id !== id))
       })
-      setNotificationMessage(`${delBlogTitle} deleted from the collection.`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
+    setNotificationMessage(`${delBlogTitle} deleted from the collection.`)
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
   }
 
   return (
@@ -199,7 +199,7 @@ const App = () => {
           updateBlog={updateBlog}
           user={user}
           removeBlog={removeBlog}
-          />
+        />
       )}
     </div>
   )

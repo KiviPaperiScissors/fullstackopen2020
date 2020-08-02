@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   const blogStyle = {
@@ -14,6 +14,7 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   const label = showDetails ? 'Hide details' : 'Show details'
 
   const toggleVisibility = (event) => {
+    event.preventDefault()
     if (showDetails) {setShowDetails(false)} else {
       setShowDetails(true)
     }
@@ -24,12 +25,12 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   )
   const verboseMode = () => (
     <>
-    <div>URL: {blog.url} </div>
-    <div>Likes: {likes} <button onClick={likeBlog}>Like</button></div>
-    <div>User: {JSON.stringify(blog.user.name)} </div>
-    {
-      user.username === blog.user.username && delButtonVisible()
-    }
+      <div className='blogUrl'>URL: {blog.url} </div>
+      <div className='blogLikes'>Likes: {likes} <button id="like" onClick={likeBlog}>Like</button></div>
+      <div className='blogUser'>User: {JSON.stringify(blog.user.name)} </div>
+      {
+        user.username === blog.user.username && delButtonVisible()
+      }
     </>
   )
 
@@ -62,13 +63,13 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <div>Title: {blog.title} </div>
-      <div>Author: {blog.author} </div>
+    <div className='blog' style={blogStyle}>
+      <div className='blogTitle'>Title: {blog.title} </div>
+      <div className='blogAuthor'>Author: {blog.author} </div>
       {
         showDetails === true && verboseMode()
       }
-      <button onClick={toggleVisibility}>{label}</button>
+      <button className='blogButton' onClick={toggleVisibility}>{label}</button>
     </div>
   )
 }

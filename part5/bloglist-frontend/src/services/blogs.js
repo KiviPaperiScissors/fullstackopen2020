@@ -24,7 +24,7 @@ const create = async newObject => {
 }
 
 const update = async (id, newObject) => {
-    const config = {
+  const config = {
     headers: { Authorization: token }
   }
 
